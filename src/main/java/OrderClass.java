@@ -1,9 +1,14 @@
 import java.util.*;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 public class OrderClass {
 
+    @Autowired
+    private DataProvider dataProvider = new DataProvider();
+
     public List<ObjectOrder> sortWithoutTreeMap() {
-        List<ObjectOrder> orderList = getData("asc");
+        List<ObjectOrder> orderList = dataProvider.getFillingData();
         //Sorting list
         orderList.sort(Comparator.comparing(ObjectOrder::getRange));
         return orderList;
@@ -28,7 +33,7 @@ public class OrderClass {
 
     public static void main(String args[]) {
         OrderClass oc = new OrderClass();
-        oc.sortWithTreeMap("asc");
+        oc.sortWithoutTreeMap();
     }
 
 }

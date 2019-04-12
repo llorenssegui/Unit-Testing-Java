@@ -1,6 +1,7 @@
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
+import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
@@ -15,7 +16,10 @@ import static org.mockito.Mockito.*;
 
 public class OrderClassTest {
 
-    @Spy
+    @Mock
+    private DataProvider dataProvider;
+
+    @Spy //@InjectMocks
     private OrderClass orderClass;
 
     @Rule
@@ -68,8 +72,21 @@ public class OrderClassTest {
         }
     }
 
+    @Test
+    public void testMockCallsInSortingFunction () {
+        try {
+            /* It Simulates an API call */
+            when(dataProvider.getFillingData()).thenReturn(mockDataList());
+            List<ObjectOrder> objectOrders = orderClass.sortWithoutTreeMap();
+            assertTrue(objectOrders.size() == 3 && objectOrders.get(0).getRange() == 1);
+        } catch (Exception e) {
+            Assert.fail(e.getMessage());
+        }
+    }
+
     private List<ObjectOrder> mockDataList() {
         List<ObjectOrder> list = new ArrayList<>();
+        list.add(new ObjectOrder(7, "Hotel 1"));
         list.add(new ObjectOrder(8, "Hotel 2"));
         list.add(new ObjectOrder(1, "Hotel 3"));
         return list;
